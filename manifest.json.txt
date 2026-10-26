@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Gestor de Acceso Web y Dispositivos",
+  "version": "1.2",
+  "description": "Controla el acceso a páginas web con panel de administración protegido por contraseña.",
+  "permissions": [
+    "storage",
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Acceso Rápido"
+  }
+}

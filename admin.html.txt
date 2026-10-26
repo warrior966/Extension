@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel de Control y Administración</title>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --danger: #ef4444;
+      --success: #10b981;
+      --bg: #f3f4f6;
+      --card-bg: #ffffff;
+      --text: #1f2937;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 30px;
+    }
+
+    .container { max-width: 1000px; margin: 0 auto; }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    h1 { margin: 0; font-size: 1.8rem; color: var(--primary); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      border-bottom: 2px solid var(--bg);
+      padding-bottom: 10px;
+    }
+
+    .form-group { display: flex; gap: 8px; margin-top: 15px; }
+    input, select {
+      flex: 1; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; outline: none; box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px 16px; background-color: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;
+    }
+    button:hover { opacity: 0.9; }
+    button.danger { background-color: var(--danger); }
+    button.success { background-color: var(--success); }
+
+    ul { list-style: none; padding: 0; margin-top: 15px; }
+    li { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #e5e7eb; }
+
+    .badge { padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
+    .badge-admin { background: #e0e7ff; color: #4338ca; }
+    .badge-user { background: #f3f4f6; color: #4b5563; }
+
+    .status-box { padding: 15px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 15px; }
+    .status-allowed { background: #d1fae5; color: #065f46; }
+    .status-blocked { background: #fee2e2; color: #991b1b; }
+
+    /* Modal de contraseña */
+    #auth-modal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 1000;
+    }
+    .modal-content {
+      background: white; padding: 30px; border-radius: 12px; text-align: center; width: 320px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    .modal-content input { width: 100%; margin: 15px 0; }
+  </style>
+</head>
+<body>
+
+  <!-- MODAL DE CONTRASEÑA -->
+  <div id="auth-modal">
+    <div class="modal-content">
+      <h2>🔒 Acceso Protegido</h2>
+      <p style="font-size: 0.9rem; color: #666;">Introduce la contraseña de administrador:</p>
+      <input type="password" id="admin-pass-input" placeholder="Contraseña (1234)">
+      <button id="verify-pass-btn" style="width: 100%;">Entrar</button>
+      <p id="pass-error" style="color: red; font-size: 0.8rem; margin-top: 10px; display: none;">Contraseña incorrecta</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <header>
+      <h1>🛡️ Panel de Administración de Seguridad</h1>
+      <div>
+        <span>Usuario actual: <strong id="current-user-name">-</strong></span>
+      </div>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <h2>🌐 Sitios Web Bloqueados</h2>
+        <div class="form-group">
+          <input type="text" id="webInput" placeholder="Ej: facebook.com">
+          <button id="addWebBtn">Bloquear</button>
+        </div>
+        <ul id="webList"></ul>
+      </div>
+
+      <div class="card">
+        <h2>💻 Control del Dispositivo</h2>
+        <div id="statusBox" class="status-box status-allowed">Estado: Permitido</div>
+        <button id="toggleDeviceBtn" style="width: 100%;">Bloquear Todo el Dispositivo</button>
+      </div>
+
+      <div class="card">
+        <h2>👥 Gestión de Usuarios y Permisos</h2>
+        <div class="form-group" style="flex-direction: column;">
+          <input type="text" id="userNameInput" placeholder="Nombre de usuario">
+          <select id="userRoleSelect">
+            <option value="user">Usuario Estándar</option>
+            <option value="admin">Administrador</option>
+          </select>
+          <button id="addUserBtn">Crear Usuario</button>
+        </div>
+        <ul id="userList"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

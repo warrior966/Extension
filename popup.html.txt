@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Acceso Rápido</title>
+  <style>
+    body { width: 220px; font-family: sans-serif; padding: 12px; margin: 0; }
+    h4 { margin: 0 0 10px 0; }
+    select, button { width: 100%; padding: 8px; margin-top: 8px; box-sizing: border-box; }
+    button { background: #4f46e5; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    button:hover { background: #4338ca; }
+  </style>
+</head>
+<body>
+  <h4>Perfil de Usuario</h4>
+  <select id="userSelect"></select>
+  <button id="openAdminBtn" style="display: none;">Abrir Panel Web Admin</button>
+
+  <script src="popup.js"></script>
+</body>
+</html>

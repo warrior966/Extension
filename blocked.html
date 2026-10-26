@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Acceso Denegado</title>
+  <title>Acceso Denegado - Seguridad</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -21,18 +21,24 @@
       border-radius: 12px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       text-align: center;
-      max-width: 450px;
+      max-width: 480px;
     }
     h1 { font-size: 2rem; margin-bottom: 10px; color: #dc3545; }
     p { font-size: 1.1rem; color: #495057; }
     .url { font-weight: bold; color: #000; }
+    .btn {
+      background-color: #4f46e5; color: white; border: none; padding: 10px 20px;
+      border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 15px;
+    }
+    .btn:hover { opacity: 0.9; }
   </style>
 </head>
 <body>
   <div class="card">
     <h1>🚫 Acceso Denegado</h1>
-    <p id="message">Esta página ha sido bloqueada por la política de seguridad.</p>
+    <p id="message">La política de seguridad ha restringido el acceso a este sitio.</p>
     <p>Sitio intentado: <span id="target-url" class="url"></span></p>
+    <button class="btn" onclick="history.back()">Volver Atrás</button>
   </div>
 
   <script>
@@ -40,12 +46,10 @@
     const reason = params.get('reason');
     const url = params.get('url');
 
-    document.getElementById('target-url').textContent = url || 'Desconocido';
+    document.getElementById('target-url').textContent = url || 'Dispositivo completo';
     
     if (reason === 'device') {
-      document.getElementById('message').textContent = 'El uso de este dispositivo está temporalmente bloqueado por el Administrador.';
-    } else {
-      document.getElementById('message').textContent = 'El acceso a esta página web no está permitido.';
+      document.getElementById('message').textContent = 'El uso de este dispositivo se encuentra bloqueado por el Administrador.';
     }
   </script>
 </body>

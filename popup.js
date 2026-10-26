@@ -1,24 +1,29 @@
-document.addEventListener("DOMContentLoaded", () => {
-  loadPopup();
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadPopup();
 
-  document.getElementById("userSelect").addEventListener("change", (e) => {
+  document.getElementById("userSelect").addEventListener("change", async (e) => {
     const selectedName = e.target.value;
-    chrome.storage.local.get(["users", "adminPassword"], (data) => {
-      const targetUser = data.users.find(u => u.name === selectedName);
+    const state = await getStorageData();
+    const targetUser = state.users.find(u => u.name === selectedName);
 
-      if (targetUser && targetUser.role === "admin") {
-        const passwordInput = prompt("Introduce la contraseña de Administrador:");
-        if (passwordInput !== (data.adminPassword || "1234")) {
-          alert("Contraseña incorrecta");
-          loadPopup();
-          return;
-        }
+    if (targetUser && targetUser.role === "admin") {
+      const passwordInput = prompt("Introduce la contraseña de Administrador:");
+      const isValid = await verifyAdminPassword(passwordInput || "");
+      if (!isValid) {
+        alert("Contraseña incorrecta");
+        await logEvent("ADMIN_AUTH_FAIL", "Intento fallido de cambio a rol admin desde popup.");
+        await loadPopup();
+        return;
       }
+      await logEvent("ADMIN_AUTH_SUCCESS", "Acceso admin concedido desde popup.");
+    }
 
-      if (targetUser) {
-        chrome.storage.local.set({ currentUser: targetUser }, loadPopup);
-      }
-    });
+    if (targetUser) {
+      state.currentUser = targetUser;
+      await setStorageData(state);
+      await logEvent("USER_SWITCH", `Cambiado a usuario: ${targetUser.name} (${targetUser.role})`);
+      await loadPopup();
+    }
   });
 
   document.getElementById("openAdminBtn").addEventListener("click", () => {
@@ -26,22 +31,21 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-function loadPopup() {
-  chrome.storage.local.get(["currentUser", "users"], (data) => {
-    const currentUser = data.currentUser || { name: "Admin", role: "admin" };
-    const users = data.users || [];
+async function loadPopup() {
+  const state = await getStorageData();
+  const currentUser = state.currentUser || { name: "Admin", role: "admin" };
+  const users = state.users || [];
 
-    const userSelect = document.getElementById("userSelect");
-    userSelect.innerHTML = "";
-    users.forEach((u) => {
-      const opt = document.createElement("option");
-      opt.value = u.name;
-      opt.textContent = `${u.name} (${u.role})`;
-      if (u.name === currentUser.name) opt.selected = true;
-      userSelect.appendChild(opt);
-    });
-
-    const openAdminBtn = document.getElementById("openAdminBtn");
-    openAdminBtn.style.display = currentUser.role === "admin" ? "block" : "none";
+  const userSelect = document.getElementById("userSelect");
+  userSelect.innerHTML = "";
+  users.forEach((u) => {
+    const opt = document.createElement("option");
+    opt.value = u.name;
+    opt.textContent = `${u.name} (${u.role})`;
+    if (u.name === currentUser.name) opt.selected = true;
+    userSelect.appendChild(opt);
   });
+
+  const openAdminBtn = document.getElementById("openAdminBtn");
+  openAdminBtn.style.display = currentUser.role === "admin" ? "block" : "none";
 }

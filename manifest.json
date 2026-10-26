@@ -1,11 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "Gestor de Acceso Web y Dispositivos",
-  "version": "1.2",
-  "description": "Controla el acceso a páginas web con panel de administración protegido por contraseña.",
+  "name": "Gestor Avanzado de Acceso Web y Dispositivos",
+  "version": "2.0",
+  "description": "Control seguro de acceso web con listas blancas/negras, roles, auditoría y declarativeNetRequest.",
   "permissions": [
     "storage",
-    "webNavigation"
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback",
+    "tabs"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -15,6 +17,6 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Acceso Rápido"
+    "default_title": "Panel de Control"
   }
 }

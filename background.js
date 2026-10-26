@@ -8,7 +8,7 @@ chrome.runtime.onInstalled.addListener(() => {
       chrome.storage.local.set({ deviceStatus: "allowed" });
     }
     if (!data.adminPassword) {
-      chrome.storage.local.set({ adminPassword: "1234" }); // Contraseña por defecto
+      chrome.storage.local.set({ adminPassword: "14052013" }); // Contraseña por defecto
     }
     if (!data.users) {
       chrome.storage.local.set({
